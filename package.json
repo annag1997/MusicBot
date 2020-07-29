@@ -1,0 +1,14 @@
+{
+    "name": "ciphermusic",
+    "version": "1.0.0",
+    "description": "My first Discord Bot. Plays music from Youtube.",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Cipher",
+    "license": "ISC",
+    "dependencies": {
+        "discord.js": "^12.2.0"
+    }
+}
