@@ -24,4 +24,4 @@ musicBot.on('message', mess => {
 });
 
 
-musicBot.login('<token>');
+musicBot.login('<token token token>');
