@@ -11,16 +11,21 @@ musicBot.once('ready', () => {
 musicBot.on('message', mess => {
     if (!mess.content.startsWith(prefix) || mess.author.bot) return;
 
-    const arg = mess.content.slice(prefix.length).split(/ + /);
-    const comm = arg.shift().toLowerCase();
+    var arg = mess.content.slice(prefix.length).split(" ");
 
-        if (comm === 'play') {
-            mess.channel.send('Playing...');
-        }
+    switch (args[0]) {
+        case 'hello':
+            mess.channel.send('Hi!');
+            break;
+        
+        case 'beulping':
+            mess.channel.send('https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A');
+            break;
 
-        else if (comm === 'beulping') {
-            mess.channel.send('https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A')
-        }
+        default:
+            mess.channel.send('Type something');
+    }
+
 });
 
 
