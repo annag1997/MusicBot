@@ -55,7 +55,8 @@ async function playMusic(mess) {
     try {
         var connect = await vc.join();
         song.connection = connect;
-        play(mess.guild, song);
+        //yt(song.songTitle);
+        return mess.channel.send("Finished playing " + song.songTitle);
 
     } catch (error) {
         console.log(error);
