@@ -1,8 +1,9 @@
-// following tutorial from https://www.youtube.com/watch?v=j_sD9udZnCk and https://www.youtube.com/watch?v=nTGtiCC3iQM 
+// following tutorial from https://www.youtube.com/watch?v=j_sD9udZnCk, https://www.youtube.com/watch?v=nTGtiCC3iQM, and https://gabrieltanner.org/blog/dicord-music-bot
 
 const Discord = require('discord.js');
 const musicBot = new Discord.Client();
 const prefix = '%';
+const yt = require("ytdl-core");
 
 musicBot.once('ready', () => {
     console.log('CioherMusic is online.')
@@ -13,7 +14,7 @@ musicBot.on('message', mess => {
 
     var arg = mess.content.slice(prefix.length).split(" ");
 
-    switch (args[0]) {
+    switch (arg[0]) {
         case 'hello':
             mess.channel.send('Hi!');
             break;
@@ -22,11 +23,45 @@ musicBot.on('message', mess => {
             mess.channel.send('https://www.youtube.com/channel/UCOmHUn--16B90oW2L6FRR3A');
             break;
 
+
+        case 'play':
+            mess.channel.send('Loading...');
+            
+            playMusic(mess);
+            break;
+
         default:
-            mess.channel.send('Type something');
+            mess.channel.send('Please add yourself into a voice channel before putting a command!');
     }
 
 });
 
+async function playMusic(mess) {
+    const arg = mess.content.split(" ");
+    const vc = mess.member.voice.channel;
 
-musicBot.login('<token token token>');
+    if (!vc) {
+        return mess.channel.send("Please add yourself into a voice channel!");
+    }
+
+    const info = await yt.getInfo(arg[1]);
+
+    const song = {
+        songTitle: info.videoDetails.title,
+        url: info.videoDetails.video_url,
+        connection: null
+    };
+
+    try {
+        var connect = await vc.join();
+        song.connection = connect;
+        play(mess.guild, song);
+
+    } catch (error) {
+        console.log(error);
+        return mess.channel.send("Error: " + error);
+    }
+}
+
+
+musicBot.login('<token>');
