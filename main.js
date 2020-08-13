@@ -4,6 +4,7 @@ const Discord = require('discord.js');
 const musicBot = new Discord.Client();
 const prefix = '%';
 const yt = require("ytdl-core");
+const yts = require("yt-search");
 
 musicBot.once('ready', () => {
     console.log('CioherMusic is online.')
@@ -44,24 +45,30 @@ async function playMusic(mess) {
         return mess.channel.send("Please add yourself into a voice channel!");
     }
 
-    const info = await yt.getInfo(arg[1]);
+    
+    let info;
+    let song;
+    
+    info = await yt.getInfo(arg[1]);
 
-    const song = {
+        song = {
         songTitle: info.videoDetails.title,
         url: info.videoDetails.video_url,
         connection: null
     };
 
-    try {
-        var connect = await vc.join();
-        song.connection = connect;
-        //yt(song.songTitle);
-        return mess.channel.send("Finished playing " + song.songTitle);
+    return mess.channel.send("Finished playing " + song.songTitle + ". Validated URL");
 
-    } catch (error) {
-        console.log(error);
-        return mess.channel.send("Error: " + error);
-    }
+    // try {
+    //     var connect = await vc.join();
+    //     song.connection = connect;
+    //     //yt(song.songTitle);
+    //     return mess.channel.send("Finished playing " + song.songTitle);
+
+    // } catch (error) {
+    //     console.log(error);
+    //     return mess.channel.send("Error: " + error);
+    // }
 }
 
 
