@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const musicBot = new Discord.Client();
 const prefix = '%';
 const yt = require("ytdl-core");
-const yts = require("yt-search");
+const yts = require('yt-search');
 
 musicBot.once('ready', () => {
     console.log('CioherMusic is online.')
@@ -53,12 +53,22 @@ async function playMusic(mess) {
         info = await yt.getInfo(arg[1]);
 
         song = {
-        songTitle: info.videoDetails.title,
-        url: info.videoDetails.video_url,
-        connection: null
+            songTitle: info.videoDetails.title,
+            url: info.videoDetails.video_url,
+            connection: null
         };
 
         return mess.channel.send("Finished playing " + song.songTitle + ". Validated URL");
+    } else {
+        info = await yts(arg[1]);
+
+        song = {
+            songTitle: info.title,
+            url: info.url,
+            connection: null
+        }
+
+        return mess.channel.send("Finished playing " + song.songTitle + ". Playing by title");
     }
     // try {
     //     var connect = await vc.join();
