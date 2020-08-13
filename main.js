@@ -49,16 +49,17 @@ async function playMusic(mess) {
     let info;
     let song;
     
-    info = await yt.getInfo(arg[1]);
+    if (yt.validateURL(arg[1])) {
+        info = await yt.getInfo(arg[1]);
 
         song = {
         songTitle: info.videoDetails.title,
         url: info.videoDetails.video_url,
         connection: null
-    };
+        };
 
-    return mess.channel.send("Finished playing " + song.songTitle + ". Validated URL");
-
+        return mess.channel.send("Finished playing " + song.songTitle + ". Validated URL");
+    }
     // try {
     //     var connect = await vc.join();
     //     song.connection = connect;

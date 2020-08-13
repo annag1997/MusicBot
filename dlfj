@@ -1,0 +1,35 @@
+[33mcommit 0ab7a19794976bda0f7d08497ca2ebbd98400b05[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Anna Galban <annagalbanss@gmail.com>
+Date:   Tue Aug 11 23:25:18 2020 -0600
+
+    replaced play with a commented function as it wasnt defined. will be adding a block of code that will be able to play song with only song title instead of URL as that was the intention all along. added yt-search to achieve that
+
+[33mcommit 16db5f62332c0b49c30f4f27cba930a92aa5580a[m
+Author: Anna Galban <annagalbanss@gmail.com>
+Date:   Tue Aug 11 18:49:35 2020 -0600
+
+    added playMusic function. currently having play is not defined error
+
+[33mcommit ffeacbe907260b4f36a955c6cf905a2ebc0f344f[m
+Author: Anna Galban <annagalbanss@gmail.com>
+Date:   Sat Aug 1 00:03:25 2020 -0600
+
+    added back in switch statement as switch statement from previous commit was accidentally deleted and reverted back to the if statements
+
+[33mcommit f0c79f3c63ae42f8943fadb8222f48df3d3a3d17[m
+Author: Anna Galban <annagalbanss@gmail.com>
+Date:   Fri Jul 31 23:57:10 2020 -0600
+
+    added ytdl core
+
+[33mcommit ff425e1cafdc0530035b54270df521119a16b153[m
+Author: Anna Galban <annagalbanss@gmail.com>
+Date:   Fri Jul 31 23:54:02 2020 -0600
+
+    adding ytdl core and changing if statements to a switch statement for better technique and readability
+
+[33mcommit 88b1a2c0d6cf95d0be8675fcde3d500b1cbdd3c2[m
+Author: Anna Galban <annagalbanss@gmail.com>
+Date:   Wed Jul 29 15:16:42 2020 -0600
+
+    Done with most basic stuff for learning how to create a Discord bot
