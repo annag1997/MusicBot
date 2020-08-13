@@ -60,15 +60,27 @@ async function playMusic(mess) {
 
         return mess.channel.send("Finished playing " + song.songTitle + ". Validated URL");
     } else {
-        info = await yts(arg[1]);
 
-        song = {
-            songTitle: info.title,
-            url: info.url,
-            connection: null
-        }
+        //testing out code from https://www.npmjs.com/package/yt-search
+        yts( arg[1], function ( err, r ) {
+            if ( err ) throw err
+           
+            const videos = r.videos
+            videos.forEach( function ( v ) {
+              return mess.channel.send( 'List of songs: ' + v.title);
+            } )
+          } )
 
-        return mess.channel.send("Finished playing " + song.songTitle + ". Playing by title");
+
+        // info = await yts(arg[1]);
+
+        // song = {
+        //     songTitle: info.title,
+        //     url: info.url,
+        //     connection: null
+        // }
+
+        // return mess.channel.send("Finished playing " + song.songTitle + ". Playing by title");
     }
     // try {
     //     var connect = await vc.join();
@@ -81,6 +93,5 @@ async function playMusic(mess) {
     //     return mess.channel.send("Error: " + error);
     // }
 }
-
 
 musicBot.login('<token>');
