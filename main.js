@@ -40,6 +40,7 @@ musicBot.on('message', mess => {
 async function playMusic(mess) {
     const arg = mess.content.split(" ");
     const vc = mess.member.voice.channel;
+    const server = mess.guild.id;
 
     if (!vc) {
         return mess.channel.send("Please add yourself into a voice channel!");
@@ -58,40 +59,43 @@ async function playMusic(mess) {
             connection: null
         };
 
-        return mess.channel.send("Finished playing " + song.songTitle + ". Validated URL");
+        try {
+            var conn = await vc.join();
+            song.connection = conn;
+
+            if (!song) {
+                return message.channel.send('There was an error in playing the song. Try again!');
+            }
+
+            const dispatcher = server.connection.playMusic(ytdl(song.url));
+            server.voiceChannel.leave();
+            return mess.channel.send("Finished playing " + song.songTitle + ". Leaving the voice channel!");
+        } catch (error) {
+            console.log(error);
+            queue.delete(message.guild.id);
+            return message.channel.send('There was an error in playing the song. Try again!');
+        }
+
+        
     } else {
 
         //testing out code from https://www.npmjs.com/package/yt-search
-        yts( arg[1], function ( err, r ) {
-            if ( err ) throw err
+        yts(arg[1], function (error, r) {
+            if (error) throw error
            
+            // return mess.channel.send(arg[1])
             const videos = r.videos
-            videos.forEach( function ( v ) {
-              return mess.channel.send( 'List of songs: ' + v.title);
-            } )
+            return mess.channel.send(videos[1]);
+            // for(i=0;i<arg.length-1;i++) {
+            //     return mess.channel.send(videos[i])
+            // }
+            // videos.forEach( function ( v ) {
+            //   const views = String( v.views ).padStart( 10, ' ' )
+            //   return mess.channel.send( `${ views } | ${ v.title } (${ v.timestamp }) | ${ v.author.name }` )
+            // } )
+            
           } )
-
-
-        // info = await yts(arg[1]);
-
-        // song = {
-        //     songTitle: info.title,
-        //     url: info.url,
-        //     connection: null
-        // }
-
-        // return mess.channel.send("Finished playing " + song.songTitle + ". Playing by title");
     }
-    // try {
-    //     var connect = await vc.join();
-    //     song.connection = connect;
-    //     //yt(song.songTitle);
-    //     return mess.channel.send("Finished playing " + song.songTitle);
-
-    // } catch (error) {
-    //     console.log(error);
-    //     return mess.channel.send("Error: " + error);
-    // }
 }
 
 musicBot.login('<token>');
