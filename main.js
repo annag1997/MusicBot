@@ -27,7 +27,8 @@ musicBot.on('message', mess => {
 
         case 'play':
             mess.channel.send('Loading...');
-            playMusic(mess, mess.guild);
+            //return mess.channel.send(mess.guild.valueOf);
+            playMusic(mess, mess.guild.valueOf);
             break;
 
         default:
@@ -60,8 +61,8 @@ async function playMusic(mess, guild) {
         try {
             var conn = await vc.join();
             song.connection = conn;
-            return mess.channel.send(guild);
-            //play(guild, song);
+            //return mess.channel.send('From playMusic function ' + guild);
+            play(guild, song);
             // return mess.channel.send("Finished playing " + song.songTitle + ". Leaving the voice channel!");
         } catch (error) {
             console.log(error);
