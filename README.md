@@ -1,4 +1,18 @@
-My first Discord Bot. Plays music from Youtube. Links for tutorial used:
+My first Discord Bot. Plays music from Youtube. Not done yet.
+
+## Instructions
+
+### To play a song via URL:
+
+%play [song_url]
+
+
+### To play a song via song's title:
+
+%play [Song Title]
+
+
+## Links for tutorial used:
 
 1. https://www.youtube.com/watch?v=j_sD9udZnCk
 2. https://www.youtube.com/watch?v=nTGtiCC3iQM 
