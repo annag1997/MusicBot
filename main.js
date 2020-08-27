@@ -61,12 +61,12 @@ async function playMusic(mess, guild) {
         try {
             var conn = await vc.join();
             song.connection = conn;
-            //return mess.channel.send('From playMusic function ' + guild);
+            //return mess.channel.send('From playMusic function ' + song.songTitle);
             play(guild, song);
             // return mess.channel.send("Finished playing " + song.songTitle + ". Leaving the voice channel!");
         } catch (error) {
             console.log(error);
-            return message.channel.send('There was an error in playing the song. Try again!');
+            return mess.channel.send('There was an error in playing the song. Try again!');
         }
 
         
@@ -92,13 +92,7 @@ async function playMusic(mess, guild) {
 }
 
 function play(g, s) {
-    const server = g.id;
-    // if (!s) {
-    //     return message.channel.send('There was an error in playing the song. Try again!');
-    // }
-
-    const dispatcher = server.connection.play(g, s);
-    server.voiceChannel.leave();
+    // const dispatcher = g.connection.playStream(ytdl(s.url));
 }
 
 musicBot.login('<token>');
