@@ -27,8 +27,7 @@ musicBot.on('message', mess => {
 
         case 'play':
             mess.channel.send('Loading...');
-            
-            playMusic(mess);
+            playMusic(mess, mess.guild);
             break;
 
         default:
@@ -37,10 +36,9 @@ musicBot.on('message', mess => {
 
 });
 
-async function playMusic(mess) {
+async function playMusic(mess, guild) {
     const arg = mess.content.split(" ");
     const vc = mess.member.voice.channel;
-    const g = mess.guild;
 
     if (!vc) {
         return mess.channel.send("Please add yourself into a voice channel!");
@@ -62,8 +60,9 @@ async function playMusic(mess) {
         try {
             var conn = await vc.join();
             song.connection = conn;
-            play(g, song);
-            return mess.channel.send("Finished playing " + song.songTitle + ". Leaving the voice channel!");
+            return mess.channel.send(guild);
+            //play(guild, song);
+            // return mess.channel.send("Finished playing " + song.songTitle + ". Leaving the voice channel!");
         } catch (error) {
             console.log(error);
             return message.channel.send('There was an error in playing the song. Try again!');
