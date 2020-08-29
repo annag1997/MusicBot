@@ -66,7 +66,6 @@ async function playMusic(mess, guild, listServer) {
               voiceChannel: vc,
               connection: null,
               songs: [],
-              volume: 5,
               playing: true
             };
 
