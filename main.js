@@ -5,6 +5,7 @@ const musicBot = new Discord.Client();
 const prefix = '%';
 const yt = require("ytdl-core");
 const yts = require('yt-search');
+const list = new Map();
 
 musicBot.once('ready', () => {
     console.log('CioherMusic is online.')
@@ -14,6 +15,7 @@ musicBot.on('message', mess => {
     if (!mess.content.startsWith(prefix) || mess.author.bot) return;
 
     var arg = mess.content.slice(prefix.length).split(" ");
+    const listServer = list.get(mess.guild.id);
 
     switch (arg[0]) {
         case 'hello':
@@ -28,7 +30,7 @@ musicBot.on('message', mess => {
         case 'play':
             mess.channel.send('Loading...');
             //return mess.channel.send(mess.guild.valueOf);
-            playMusic(mess, mess.guild.valueOf);
+            playMusic(mess, mess.guild.valueOf, listServer);
             break;
 
         default:
@@ -37,7 +39,7 @@ musicBot.on('message', mess => {
 
 });
 
-async function playMusic(mess, guild) {
+async function playMusic(mess, guild, listServer) {
     const arg = mess.content.split(" ");
     const vc = mess.member.voice.channel;
 
@@ -58,15 +60,35 @@ async function playMusic(mess, guild) {
             connection: null
         };
 
-        try {
-            var conn = await vc.join();
-            song.connection = conn;
-            //return mess.channel.send('From playMusic function ' + song.songTitle);
-            play(guild, song);
-            // return mess.channel.send("Finished playing " + song.songTitle + ". Leaving the voice channel!");
-        } catch (error) {
-            console.log(error);
-            return mess.channel.send('There was an error in playing the song. Try again!');
+        if (!listServer) {
+            const listData = {
+              textChannel: mess.channel,
+              voiceChannel: vc,
+              connection: null,
+              songs: [],
+              volume: 5,
+              playing: true
+            };
+
+            list.set(guild, listData);
+            listData.songs.push(song);
+
+            try {
+                var conn = await vc.join();
+                list.connection = conn;
+                //return mess.channel.send('From playMusic function ' + song.songTitle);
+                play(guild, listData.songs[0]);
+                // return mess.channel.send("Finished playing " + song.songTitle + ". Leaving the voice channel!");
+            } catch (error) {
+                console.log(error);
+                list.delete(guild);
+                return mess.channel.send('There was an error in playing the song. Try again!');
+            }
+
+        }
+        else {
+            listServer.songs.push(song);
+            return mess.channel.send(`${song.title} has been added to the queue!`);
         }
 
         
@@ -92,7 +114,15 @@ async function playMusic(mess, guild) {
 }
 
 function play(g, s) {
-    // const dispatcher = g.connection.playStream(ytdl(s.url));
+    const server = list.get(g);
+
+    server.disptacher = server.connection.playStream(ytdl(s.url, {filter: "audioonly"}))
+    .on("end", () => {
+        server.songs.shift();
+        play(guild, server.songs[0]);
+    })
+    .on("error", error => console.error(error));
+
 }
 
 musicBot.login('<token>');
