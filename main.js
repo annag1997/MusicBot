@@ -54,6 +54,7 @@ async function playMusic(mess, guild, listServer) {
     if (yt.validateURL(arg[1])) {
         info = await yt.getInfo(arg[1]);
 
+        //using logic from: https://gabrieltanner.org/blog/dicord-music-bot
         song = {
             songTitle: info.videoDetails.title,
             url: info.videoDetails.video_url,
@@ -61,6 +62,7 @@ async function playMusic(mess, guild, listServer) {
         };
 
         if (!listServer) {
+            
             const listData = {
               textChannel: mess.channel,
               voiceChannel: vc,
@@ -87,7 +89,7 @@ async function playMusic(mess, guild, listServer) {
         }
         else {
             listServer.songs.push(song);
-            return mess.channel.send(`${song.title} has been added to the queue!`);
+            return mess.channel.send(song.songTitle + 'has been added to the queue!');
         }
 
         
@@ -115,6 +117,7 @@ async function playMusic(mess, guild, listServer) {
 function play(g, s) {
     const server = list.get(g);
 
+    // using logic from both: https://www.youtube.com/watch?v=j_sD9udZnCk and //using logic from: https://gabrieltanner.org/blog/dicord-music-bot
     server.disptacher = server.connection.playStream(ytdl(s.url, {filter: "audioonly"}))
     .on("end", () => {
         server.songs.shift();
