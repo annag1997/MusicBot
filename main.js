@@ -30,7 +30,7 @@ musicBot.on('message', mess => {
         case 'play':
             mess.channel.send('Loading...');
             //return mess.channel.send(mess.guild.valueOf);
-            playMusic(mess, mess.guild.valueOf, listServer);
+            playMusic(mess, mess.guild.id, listServer);
             break;
 
         default:
@@ -89,7 +89,7 @@ async function playMusic(mess, guild, listServer) {
         }
         else {
             listServer.songs.push(song);
-            return mess.channel.send(song.songTitle + 'has been added to the queue!');
+            return mess.channel.send(song.songTitle + ' has been added to the queue!');
         }
 
         
@@ -118,7 +118,7 @@ function play(g, s) {
     const server = list.get(g);
 
     // using logic from both: https://www.youtube.com/watch?v=j_sD9udZnCk and //using logic from: https://gabrieltanner.org/blog/dicord-music-bot
-    server.disptacher = server.connection.play(ytdl(s.url, {filter: "audioonly"}))
+    server.disptacher = server.connection.play(yt(s.url, {filter: "audioonly"}))
     .on("end", () => {
         server.songs.shift();
         play(guild, server.songs[0]);
