@@ -118,7 +118,7 @@ function play(g, s) {
     const server = list.get(g);
 
     // using logic from both: https://www.youtube.com/watch?v=j_sD9udZnCk and //using logic from: https://gabrieltanner.org/blog/dicord-music-bot
-    server.disptacher = server.connection.playStream(ytdl(s.url, {filter: "audioonly"}))
+    server.disptacher = server.connection.play(ytdl(s.url, {filter: "audioonly"}))
     .on("end", () => {
         server.songs.shift();
         play(guild, server.songs[0]);
