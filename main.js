@@ -55,24 +55,10 @@ async function playMusic(mess, guild, listServer) {
         info = await yt.getInfo(arg[1]);
 
         //using logic from: https://gabrieltanner.org/blog/dicord-music-bot
-        song = {
-            songTitle: info.videoDetails.title,
-            url: info.videoDetails.video_url,
-            connection: null
-        };
-
-        if (!listServer) {
-            
-            const listData = {
-              textChannel: mess.channel,
-              voiceChannel: vc,
-              connection: null,
-              songs: [],
-              playing: true
-            };
-
-            list.set(guild, listData);
-            listData.songs.push(song);
+        var songObjects = songContract(listServer, info, mess, vc, guild);
+        listServer = songObjects[0];
+        song = songObjects[1];
+        var listData = songObjects[2];
 
             try {
                 var conn = await vc.join();
@@ -86,14 +72,7 @@ async function playMusic(mess, guild, listServer) {
                 return mess.channel.send('There was an error in playing the song. Try again!');
             }
 
-        }
-        else {
-            listServer.songs.push(song);
-            return mess.channel.send(song.songTitle + ' has been added to the queue!');
-        }
-
-        
-    } else {
+        } else {
 
         //testing out code from https://www.npmjs.com/package/yt-search
         yts(arg[1], function (error, r) {
@@ -125,6 +104,36 @@ function play(g, s) {
     })
     .on("error", error => console.error(error));
 
+}
+
+
+function songContract(listServer, info, mess, vc, guild){
+    song = {
+        songTitle: info.videoDetails.title,
+        url: info.videoDetails.video_url,
+        connection: null
+    };
+
+    let listData;
+
+    if (!listServer) {
+        
+        listData = {
+          textChannel: mess.channel,
+          voiceChannel: vc,
+          connection: null,
+          songs: [],
+          playing: true
+        };
+
+        list.set(guild, listData);
+        listData.songs.push(song);
+    } else {
+        listServer.songs.push(song);
+        return mess.channel.send(song.songTitle + ' has been added to the queue!');
+    }
+
+    return {listServer, song, listData};
 }
 
 musicBot.login('<token>');
